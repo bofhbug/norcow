@@ -8,13 +8,11 @@
 #define FLASH_FLAG_PGAERR 0
 #define FLASH_FLAG_PGPERR 0
 #define FLASH_FLAG_PGSERR 0
+#define FLASH_TYPEERASE_SECTORS 0
+#define FLASH_TYPEPROGRAM_WORD 0
+#define FLASH_VOLTAGE_RANGE_3 0
 
 #define HAL_OK 0
-
-#define TYPEERASE_SECTORS 0
-#define TYPEPROGRAM_WORD 0
-
-#define VOLTAGE_RANGE_3 0
 
 typedef struct {
     uint32_t TypeErase;

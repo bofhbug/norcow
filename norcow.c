@@ -57,8 +57,8 @@ static bool norcow_erase(uint8_t sector)
     FLASH_EraseInitTypeDef EraseInitStruct;
     __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR |
                            FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
-    EraseInitStruct.TypeErase = TYPEERASE_SECTORS;
-    EraseInitStruct.VoltageRange = VOLTAGE_RANGE_3; // voltage range needs to be 2.7V to 3.6V
+    EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;
+    EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
     EraseInitStruct.NbSectors = 1;
     EraseInitStruct.Sector = NORCOW_START_SECTOR + sector;
     HAL_StatusTypeDef r;
@@ -116,11 +116,11 @@ static bool norcow_write(uint8_t sector, uint32_t offset, uint32_t prefix, const
 #ifdef NORCOW_STM32
     HAL_FLASH_Unlock();
     uint32_t addr = (uint32_t)ptr;
-    HAL_FLASH_Program(TYPEPROGRAM_WORD, addr, prefix);
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, addr, prefix);
     addr += 4;
     for (size_t i = 0; i < (len + 3) / sizeof(uint32_t); i++) {
         const uint32_t *d = (const uint32_t *)(data + i * sizeof(uint32_t));
-        HAL_FLASH_Program(TYPEPROGRAM_WORD, addr, *d);
+        HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, addr, *d);
         addr += 4;
     }
     HAL_FLASH_Lock();
