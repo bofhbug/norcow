@@ -282,7 +282,6 @@ bool norcow_init(void)
     if (f) {
         size_t r = fread(norcow_buffer, sizeof(norcow_buffer), 1, f);
         fclose(f);
-        printf("%d\n", (int)r);
         if (r != 1) {
             memset(norcow_buffer, 0xFF, sizeof(norcow_buffer));
         }
