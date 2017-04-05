@@ -1,6 +1,6 @@
 NAME=norcow_test
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror -DUNIX
+CFLAGS=-std=c99 -Wall -Wextra -Werror -DUNIX
 LDFLAGS=
 LIBS=
 OBJ=$(NAME).o norcow.o

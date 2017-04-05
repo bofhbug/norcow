@@ -9,6 +9,7 @@
 #endif
 #include <stdio.h>
 static uint8_t norcow_buffer[NORCOW_SECTOR_COUNT * NORCOW_SECTOR_SIZE];
+#define NORCOW_START_ADDRESS norcow_buffer
 #endif
 
 #ifdef NORCOW_STM32
@@ -81,13 +82,7 @@ static const void *norcow_ptr(uint8_t sector, uint32_t offset, uint32_t size)
     if (offset + size > NORCOW_SECTOR_SIZE) {
         return NULL;
     }
-#ifdef NORCOW_UNIX
-    return (const void *)(norcow_buffer + sector * NORCOW_SECTOR_SIZE + offset);
-#endif
-#ifdef NORCOW_STM32
     return (const void *)(NORCOW_START_ADDRESS + sector * NORCOW_SECTOR_SIZE + offset);
-#endif
-    return NULL;
 }
 
 /*
@@ -108,7 +103,7 @@ static bool norcow_write(uint8_t sector, uint32_t offset, uint32_t prefix, const
     if ((*(uint32_t *)ptr & prefix) != prefix) {
         return false;
     }
-    for (uint16_t i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) {
         if ((ptr[sizeof(uint32_t) + i] & data[i]) != data[i]) {
             return false;
         }
@@ -120,10 +115,13 @@ static bool norcow_write(uint8_t sector, uint32_t offset, uint32_t prefix, const
 #endif
 #ifdef NORCOW_STM32
     HAL_FLASH_Unlock();
-    HAL_FLASH_Program(TYPEPROGRAM_WORD, NORCOW_START_ADDRESS + sector * NORCOW_SECTOR_SIZE + offset, prefix);
+    uint32_t addr = (uint32_t)ptr;
+    HAL_FLASH_Program(TYPEPROGRAM_WORD, addr, prefix);
+    addr += 4;
     for (int i = 0; i < (len + 3) / sizeof(uint32_t); i++) {
         const uint32_t *d = (const uint32_t *)(data + i * sizeof(uint32_t));
-        HAL_FLASH_Program(TYPEPROGRAM_WORD, NORCOW_START_ADDRESS + sector * NORCOW_SECTOR_SIZE + offset + (1 + i) * sizeof(uint32_t), *d);
+        HAL_FLASH_Program(TYPEPROGRAM_WORD, addr, *d);
+        addr += 4;
     }
     HAL_FLASH_Lock();
     return true;
