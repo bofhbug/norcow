@@ -129,15 +129,7 @@ static bool norcow_write(uint8_t sector, uint32_t offset, uint32_t prefix, const
     return false;
 }
 
-/*
- * Aligns position to 4-byte boundary
- */
-static inline void align4(uint32_t *pos)
-{
-    if (*pos & 3) {
-        *pos = (*pos + 3) & ~3;
-    }
-}
+#define ALIGN4(X) (X) = ((X) + 3) & ~3
 
 /*
  * Reads one item starting from offset
@@ -162,7 +154,7 @@ static bool read_item(uint8_t sector, uint32_t offset, uint16_t *key, const void
     *val = norcow_ptr(sector, *pos, *len);
     if (*val == NULL) return false;
     *pos += *len;
-    align4(pos);
+    ALIGN4(*pos);
     return true;
 }
 
@@ -173,7 +165,7 @@ static bool write_item(uint8_t sector, uint32_t offset, uint16_t key, const void
 {
     uint32_t prefix = (len << 16) | key;
     *pos = offset + sizeof(uint32_t) + len;
-    align4(pos);
+    ALIGN4(*pos);
     return norcow_write(sector, offset, prefix, val, len);
 }
 

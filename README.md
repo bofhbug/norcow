@@ -8,8 +8,8 @@ See `norcow.h` for the API.
 
 ## Record format
 
-| offset | length | type     | field        |
-|-------:|-------:|----------|--------------|
-| 0x0000 | 2      | uint16_t | key          |
-| 0x0002 | 2      | uint16_t | value length |
-| 0x0004 | length | bytes    | value        |
+```
+uint16_t key
+uint16_t length
+uint8_t value[length]
+```
