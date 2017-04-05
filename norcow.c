@@ -103,7 +103,7 @@ static bool norcow_write(uint8_t sector, uint32_t offset, uint32_t prefix, const
     if ((*(uint32_t *)ptr & prefix) != prefix) {
         return false;
     }
-    for (int i = 0; i < len; i++) {
+    for (size_t i = 0; i < len; i++) {
         if ((ptr[sizeof(uint32_t) + i] & data[i]) != data[i]) {
             return false;
         }
@@ -118,7 +118,7 @@ static bool norcow_write(uint8_t sector, uint32_t offset, uint32_t prefix, const
     uint32_t addr = (uint32_t)ptr;
     HAL_FLASH_Program(TYPEPROGRAM_WORD, addr, prefix);
     addr += 4;
-    for (int i = 0; i < (len + 3) / sizeof(uint32_t); i++) {
+    for (size_t i = 0; i < (len + 3) / sizeof(uint32_t); i++) {
         const uint32_t *d = (const uint32_t *)(data + i * sizeof(uint32_t));
         HAL_FLASH_Program(TYPEPROGRAM_WORD, addr, *d);
         addr += 4;

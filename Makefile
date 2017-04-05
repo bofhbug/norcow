@@ -5,6 +5,8 @@ LDFLAGS=
 LIBS=
 OBJ=$(NAME).o norcow.o
 
+all: $(NAME)
+
 $(NAME): $(OBJ)
 	$(CC) $(LDFLAGS) $(LIBS) $(OBJ) -o $(NAME)
 
