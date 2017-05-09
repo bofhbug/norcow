@@ -1,17 +1,16 @@
-NAME=norcow_test
 CC=gcc
 CFLAGS=-std=c99 -Wall -Wextra -Werror -DUNIX
 LDFLAGS=
 LIBS=
-OBJ=$(NAME).o norcow.o
+OBJ=norcow.o
 
-all: $(NAME)
+all: test_api.exe test_random.exe
 
-$(NAME): $(OBJ)
-	$(CC) $(LDFLAGS) $(LIBS) $(OBJ) -o $(NAME)
+%.exe: %.o $(OBJ)
+	$(CC) $(LDFLAGS) $(LIBS) $(OBJ) $< -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(NAME) $(OBJ)
+	rm -f $(OBJ) *.exe
