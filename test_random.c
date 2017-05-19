@@ -10,6 +10,7 @@
 
 uint8_t val[MAXVALLEN], *v;
 uint16_t key, vallen, vlen;
+bool res;
 
 int main()
 {
@@ -17,7 +18,6 @@ int main()
 
     norcow_init();
 
-    bool r;
     for (int i = 0; i < 10000; i++) {
 
         vallen = rand() % (MAXVALLEN + 1);
@@ -29,16 +29,18 @@ int main()
 
         printf("#%d key=0x%04x size=%d\n", i, key, vallen);
 
-        r = norcow_set(key, val, vallen);
-        if (!r) {
+        res = norcow_set(key, val, vallen);
+        if (!res) {
             printf("Write failed (full storage)\n");
             continue;
         }
 
-        r = norcow_get(key, (const void **)&v, &vlen);
-        assert(r == 1);
+        res = norcow_get(key, (const void **)&v, &vlen);
+        assert(res == 1);
 
         assert(vlen == vallen);
         assert(0 == memcmp(val, v, vallen));
     }
+
+    return 0;
 }

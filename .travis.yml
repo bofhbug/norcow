@@ -12,3 +12,5 @@ script:
   - make -f Makefile.stm32
   - make clean
   - make
+  - ./test_api.exe
+  - ./test_unit.exe

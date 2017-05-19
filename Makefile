@@ -4,7 +4,7 @@ LDFLAGS=
 LIBS=
 OBJ=norcow.o
 
-all: test_api.exe test_random.exe
+all: test_api.exe test_random.exe test_unit.exe
 
 %.exe: %.o $(OBJ)
 	$(CC) $(LDFLAGS) $(LIBS) $(OBJ) $< -o $@
