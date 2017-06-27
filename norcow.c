@@ -330,3 +330,6 @@ bool norcow_set(uint16_t key, const void *val, uint16_t len)
     }
     return r;
 }
+
+// only for internal use in unit tests
+const void *norcow_start_address = (const void *)NORCOW_START_ADDRESS;
